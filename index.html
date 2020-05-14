@@ -41,21 +41,46 @@
   </head>
 
   <body>
-    <img src="https://picsum.photos/670/500" alt="Picture of the day" />
+    <img id="image" src="" alt="Picture of the day" />
     <blockquote id="quote"></blockquote>
   </body>
 
   <script>
-    fetch("https://api.paperquotes.com/apiv1/qod/?lang=en", {
-      headers: {
-        Authorization: "Token d30f61a55b35fbf07920c85cb2bf35ab53ebedb4",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => data.quote)
-      .then((quote) => {
-        const quoteElement = document.getElementById("quote");
-        quoteElement.innerText = quote;
-      });
+    const isFriday = new Date().getDay() === 5;
+    const imgElement = document.getElementById("image");
+
+    if (isFriday) {
+      const fridayQuotes = [
+        "It's Friday, Friday. Gotta get down on friday.",
+        "Partyin', partyin', yeah. Partyin', partyin', yeah.",
+        "Fun, fun, fun, fun. Lookin' forward to the weekend.",
+        "Yesterday was Thursday, Thursday. Today is Friday, Friday.",
+        "Tomorrow is Saturday. And Sunday comes afterwards.",
+        "Check my time, it's Friday, it's a weekend.",
+        "Friday, Friday. Gettin' down on Friday.",
+      ];
+
+      imgElement.src = "rebecca.jpg";
+      const fridayQuote =
+        fridayQuotes[Math.floor(Math.random() * fridayQuotes.length)] +
+        " - Rebecca Black";
+      setQuote(fridayQuote);
+    } else {
+      imgElement.src = "https://picsum.photos/670/500";
+
+      fetch("https://api.paperquotes.com/apiv1/qod/?lang=en", {
+        headers: {
+          Authorization: "Token d30f61a55b35fbf07920c85cb2bf35ab53ebedb4",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => data.quote)
+        .then(setQuote);
+    }
+
+    function setQuote(text) {
+      const quoteElement = document.getElementById("quote");
+      quoteElement.innerText = text;
+    }
   </script>
 </html>
